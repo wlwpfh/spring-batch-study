@@ -1,5 +1,6 @@
 package com.example.springbatchstudy.job;
 
+import com.example.springbatchstudy.id.UniqueRunIdIncrementer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -18,10 +19,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 public class TestJobConfiguration {
     private final PlatformTransactionManager transactionManager;
+
     @Bean
     public Job testJob(JobRepository jobRepository) {
         return new JobBuilder("testJob", jobRepository)
                 .start(testStep(jobRepository, transactionManager))
+                .incrementer(new UniqueRunIdIncrementer())
                 .build();
     }
 
